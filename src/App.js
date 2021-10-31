@@ -9,10 +9,11 @@ function App() {
   const [notes, setNotes] = useState([
     {
       id: nanoid(),
-      text: "This is my first note!",
+      text: "this is my first note!",
       date: "15/10/21"
     }
   ]);
+
   const handleNoteText = (text) => {
     const date = new Date();
     const newNote = {
@@ -22,7 +23,6 @@ function App() {
       category: category
     };
     setNotes([...notes, newNote])
-    console.log(notes);
   }
   // To set the state of Search element
   const [searchText, setSearchtext] = useState('');
@@ -48,22 +48,35 @@ function App() {
     const newNote = notes.filter(item => item.id !== id);
     setNotes(newNote);
   }
-
   const handleCategory = (value) => {
     setCategory(value)
+  }
+  const editHandle = (editval, id) => {
+    const notes1 = notes.filter(note => {
+      if (note.id === id) {
+        note.text = editval;
+
+      }
+      return note;
+    })
+    setNotes(notes1);
+    alert('Notes updated')
   }
   return (
     <div className="container ">
       <Header handleCategory={handleCategory} />
       <Search handleSearchText={setSearchtext} />
-      {/*  Filter function to filter the note based on Category and Search text
-      */}
+      {/*  Filter function to filter the note based on Category 
+      and Search text */}
       <NoteList notes={notes.filter(
         note => (note.category) ? note.text.toLowerCase().includes(searchText) &&
           note.category.toLowerCase().includes(category.toLowerCase()) : ""
       )}
         handleNoteText={handleNoteText}
-        handleDelete={handleDelete} />
+        handleDelete={handleDelete}
+        editHandle={editHandle}
+        notesDetails={notes}
+      />
     </div>
   )
 }
